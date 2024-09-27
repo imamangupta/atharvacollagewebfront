@@ -19,7 +19,8 @@ import Gallery from '@/components/dashboard/Gallery'
 
 import { useDispatch } from 'react-redux'
 import { addUser } from '@/app/redux/slice'
-import VideoRoom from '@/components/dashboard/VideoRoom'
+// import VideoRoom from '@/components/dashboard/Interview'
+import Interview from '@/components/dashboard/Interview'
 
 export default function Dashboard() {
   // const searchParams = useSearchParams();
@@ -76,7 +77,7 @@ export default function Dashboard() {
       case 'messages':
         return <Messaging />
       case 'videocall':
-        return <VideoRoom />
+        return <Interview />
       case 'gallery':
         return <Gallery />
       default:
