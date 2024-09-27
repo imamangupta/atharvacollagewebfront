@@ -4,8 +4,10 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Home, Calendar, CheckSquare, DollarSign, Users, MessageSquare, ChevronLeft, ChevronRight, Video } from 'lucide-react'
 import { Button } from "@/components/ui/button"
+import { useRouter } from 'next/navigation'
 
 export function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) {
+  const router = useRouter()
   const menuItems = [
     { icon: Home, label: 'Overview', id: 'overview' },
     { icon: Calendar, label: 'Events', id: 'events' },
@@ -15,6 +17,12 @@ export function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOp
     { icon: MessageSquare, label: 'Messages', id: 'messages' },
     { icon: Video, label: 'Video Call', id: 'videocall' },
   ]
+
+
+  const logout =()=>{
+    localStorage.clear()
+    router.push("/")
+  }
 
   return (
     <motion.aside 
@@ -52,6 +60,9 @@ export function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOp
             {isSidebarOpen && <span className="font-medium">{item.label}</span>}
           </motion.button>
         ))}
+        <div>
+            <Button onClick={logout} className="w-full">LogOut</Button>
+        </div>
       </nav>
     </motion.aside>
   )

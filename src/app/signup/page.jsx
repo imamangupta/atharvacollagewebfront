@@ -13,7 +13,10 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 // import { BaseApiUrl } from '@/utils/constanst'
 
+
+
 import { toast } from "sonner";
+import { BaseApiUrl } from '@/utils/constants'
 
 export default function SignupForm() {
     const [formData, setFormData] = useState({
@@ -50,8 +53,7 @@ export default function SignupForm() {
         const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
         const isPasswordValid = password.length >= 8
 
-
-        setIsFormValid(isEmailValid && isPasswordValid && userType && userName && lastname && firstname)
+        setIsFormValid(isEmailValid && isPasswordValid  && userName && lastname && firstname)
     }
 
     const handleSubmit = async (e) => {

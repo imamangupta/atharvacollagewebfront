@@ -8,7 +8,9 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { toast } from "sonner"
 import { useRouter } from 'next/navigation'
+import { BaseApiUrl } from '@/utils/constants'
 // import { BaseApiUrl } from '@/utils/constanst'
+
 export default function Otp() {
     const [otp, setOtp] = useState('')
     const router = useRouter()
@@ -36,7 +38,7 @@ export default function Otp() {
         if (json.message) {
 
 
-            const response2 = await fetch(`https://jobportal-backend-wine.vercel.app/signup`, {
+            const response2 = await fetch(`https://atharva-backend.vercel.app/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

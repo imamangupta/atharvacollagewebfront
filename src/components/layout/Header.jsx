@@ -70,12 +70,17 @@ export function Header() {
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
-            <Button variant="ghost" asChild>
-              <Link href='/login'>Login</Link>
-            </Button>
-            <Button variant="default" className="bg-indigo-600 hover:bg-indigo-700" asChild>
-              <Link href="/join">Join Now</Link>
-            </Button>
+            {
+              !localStorage.getItem('token') ? <>
+
+                <Button variant="ghost" asChild>
+                  <Link href='/login'>Login</Link>
+                </Button>
+                <Button variant="default" className="bg-indigo-600 hover:bg-indigo-700" asChild>
+                  <Link href="/signup">Sign up</Link>
+                </Button>
+              </> : ""
+            }
           </div>
           <div className="md:hidden">
             <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
