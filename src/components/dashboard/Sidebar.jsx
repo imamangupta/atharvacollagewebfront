@@ -17,6 +17,8 @@ export function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOp
     { icon: Users, label: 'Vendors', id: 'vendors' },
     { icon: MessageSquare, label: 'Messages', id: 'messages' },
     { icon: Video, label: 'Video Call', id: 'videocall' },
+    { icon: Video, label: 'Gallary', id: 'Gallary' }
+
   ]
 
 
