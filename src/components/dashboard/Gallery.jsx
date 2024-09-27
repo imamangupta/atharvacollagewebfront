@@ -111,12 +111,14 @@ export default function Gallery() {
   
 
   const handleDownload = (imageUrl) => {
-    const link = document?.createElement("a")
-    link.href = imageUrl
-    link.download = "pinterest-image.jpg"
-    document?.body.appendChild(link)
-    link.click()
-    document?.body.removeChild(link)
+    console.log(imageUrl);
+    
+    // const link = document?.createElement("a")
+    // link.href = imageUrl
+    // link.download = "pinterest-image.jpg"
+    // document?.body.appendChild(link)
+    // link.click()
+    // document?.body.removeChild(link)
   }
 
   const indexOfLastImage = currentPage * ITEMS_PER_PAGE
