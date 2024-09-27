@@ -6,19 +6,15 @@ import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 const VideoRoom = () => {
   const containerRef = useRef(null); // Reference for the video call container
   const [roomID, setRoomID] = useState(""); // State to manage the roomID
+  const [isClient, setIsClient] = useState(false); // Track if it's client-side
 
   useEffect(() => {
-    // Only run this code on the client side
-    if (typeof window !== "undefined") {
-      // Fetch or generate roomID
-      const urlParams = new URLSearchParams(window.location.search);
-      const urlRoomID = urlParams.get("roomID") || Math.floor(Math.random() * 10000).toString();
-      setRoomID(urlRoomID);
-    }
+    // Check if it's running on the client side
+    setIsClient(typeof window !== "undefined");
   }, []);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && roomID && containerRef.current) {
+    if (isClient && roomID && containerRef.current) {
       // Initialize participant details
       const userID = Math.floor(Math.random() * 10000).toString();
       const userName = "userName" + userID;
@@ -43,13 +39,25 @@ const VideoRoom = () => {
         },
       });
     }
-  }, [roomID]);
+  }, [isClient, roomID]);
+
+  useEffect(() => {
+    if (isClient) {
+      // Fetch or generate roomID only on the client side
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlRoomID = urlParams.get("roomID") || Math.floor(Math.random() * 10000).toString();
+      setRoomID(urlRoomID);
+    }
+  }, [isClient]);
+
+  // Prevent rendering until it's confirmed the code is running on the client-side
+  if (!isClient) {
+    return null; // Prevent server-side rendering
+  }
 
   return (
     <div className="video-call-container" style={{ height: "80vh", width: "70vw" }}>
-      {typeof window !== "undefined" && (
-        <div ref={containerRef} className="h-full w-full"></div>
-      )}
+      <div ref={containerRef} className="h-full w-full"></div>
     </div>
   );
 };
