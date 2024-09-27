@@ -22,13 +22,13 @@ import { addUser } from '@/app/redux/slice'
 import VideoRoom from '@/components/dashboard/VideoRoom'
 
 export default function Dashboard() {
-  const searchParams = useSearchParams();
-  const nav = searchParams.get('nav');
+  // const searchParams = useSearchParams();
+  // const nav = searchParams.get('nav');
   const dispatch = useDispatch();
 
 
 
-  const [activeTab, setActiveTab] = useState(nav || 'overview')
+  const [activeTab, setActiveTab] = useState('overview')
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [userData, setUserData] = useState([])
 
