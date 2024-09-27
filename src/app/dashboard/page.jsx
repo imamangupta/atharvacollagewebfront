@@ -20,7 +20,7 @@ import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { addUser } from '@/app/redux/slice'
 import VideoRoom from '@/components/dashboard/VideoRoom'
-
+import { Suspense } from 'react';
 
 export default function Dashboard() {
   const searchParams = useSearchParams();
@@ -101,8 +101,9 @@ export default function Dashboard() {
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.3 }}
           >
-           
+           <Suspense fallback={<div>Loading...</div>}>
               {renderContent()}
+           </Suspense>
         
           </motion.div>
         </AnimatePresence>
