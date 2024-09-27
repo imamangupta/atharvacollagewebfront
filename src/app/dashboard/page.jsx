@@ -6,10 +6,11 @@ import { Sidebar } from '@/components/dashboard/Sidebar'
 import { EventOverview } from '@/components/dashboard/EventOverview'
 import { TaskManager } from '@/components/dashboard/TaskManager'
 // import { BudgetTrackerUser } from '@/components/dashboard/BudgetTrackerUser'
-import { VendorDirectory } from '@/components/dashboard/VendorDirectory'
+// import {  } from '@/components/dashboard/VendorDirectory'
 import { Messaging } from '@/components/dashboard/Messaging'
 import BudgetTrackerUser from '@/components/dashboard/BudgetTrackerUser'
 import BudgetTrackerAdmin from '@/components/dashboard/BudgetTrackerAdmin'
+import VendorDirectory from '@/components/dashboard/VendorDirectory'
 // import { BudgetTrackerAdmin } from '@/components/dashboard/BudgetTrackerAdmin'
 
 export default function Dashboard() {
