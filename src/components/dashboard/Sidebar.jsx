@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Home, Calendar, CheckSquare, DollarSign, Users, MessageSquare, ChevronLeft, ChevronRight, Video } from 'lucide-react'
+import { Home, Calendar, CheckSquare, DollarSign, Users, MessageSquare, ChevronLeft, ChevronRight, Video , Images } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { useRouter } from 'next/navigation'
 
@@ -17,6 +17,8 @@ export function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOp
     { icon: Users, label: 'Vendors', id: 'vendors' },
     { icon: MessageSquare, label: 'Messages', id: 'messages' },
     { icon: Video, label: 'Video Call', id: 'videocall' },
+    { icon: Images, label: 'Gallery', id: 'gallery' }
+
   ]
 
 
