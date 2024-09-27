@@ -55,8 +55,8 @@ export default function BudgetTrackerUser() {
       username: currentUser.name,
       amount: parseFloat(newBill.amount),
       status: 'pending',
-      billPhoto: billPhoto || '/placeholder.svg?height=100&width=100',
-      productPhoto: productPhoto || '/placeholder.svg?height=100&width=100'
+      billPhoto: billPhoto || 'https://via.placeholder.com/100?text=Bill+Photo',
+      productPhoto: productPhoto || 'https://via.placeholder.com/100?text=Product+Photo'
     }
     setBills([...bills, billToAdd])
     setIsAddingBill(false)
@@ -91,7 +91,7 @@ export default function BudgetTrackerUser() {
     }
     closeCamera()
   }
-  console.log(setBillPhoto);
+  console.log(billPhoto);
   const closeCamera = () => {
     const stream = videoRef.current.srcObject
     const tracks = stream.getTracks()
