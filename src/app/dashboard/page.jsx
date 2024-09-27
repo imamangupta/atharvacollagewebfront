@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useEffect, useState } from 'react'
+import {  useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Sidebar } from '@/components/dashboard/Sidebar'
 import { EventOverview } from '@/components/dashboard/EventOverview'
@@ -15,7 +15,7 @@ import VendorDirectory from '@/components/dashboard/VendorDirectory'
 // import { BudgetTrackerAdmin } from '@/components/dashboard/BudgetTrackerAdmin'
 import { useSearchParams } from "next/navigation";
 import EventPerticular from '@/components/dashboard/EventPerticular'
-import { Suspense } from 'react';
+
 
 
 
@@ -95,9 +95,9 @@ export default function Dashboard() {
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.3 }}
           >
-            <Suspense fallback={<div>Loading...</div>}>
+           
               {renderContent()}
-            </Suspense>
+        
           </motion.div>
         </AnimatePresence>
       </main>
