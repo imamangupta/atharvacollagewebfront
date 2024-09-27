@@ -23,40 +23,41 @@ export function EventCard({ event, index }) {
 
   return (
     <motion.div variants={cardVariants}>
-      <Link href={`/event/${event.id}`}>
+      <Link href={`/event/${event._id}`}>
         <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 transform hover:-translate-y-1">
           <CardHeader className="relative p-0 h-48">
-            <Image
-              src={event.image}
-              alt={event.name}
+            <img
+              src={event.eventurl}
+              alt={event.eventname}
               layout="fill"
               objectFit="cover"
-              className="rounded-t-lg"
+              className="rounded-t-lg object-fit" 
+              style={{overflow:'hidden'}}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
             <CardTitle className="absolute bottom-4 left-4 text-2xl font-bold text-white">
-              {event.name}
+              {event.eventname}
             </CardTitle>
           </CardHeader>
           <CardContent className="mt-4 space-y-4">
-            <div className="flex items-center text-gray-600">4
+            <div className="flex items-center text-gray-600">
               <Calendar className="mr-2 h-5 w-5" />
-              <span>{event.date}</span>
+              <span>{event.eventdate}</span>
             </div>
             <div className="flex items-center text-gray-600">
               <MapPin className="mr-2 h-5 w-5" />
               <span>{event.location}</span>
             </div>
-            <div className="flex items-center text-gray-600">
+            {/* <div className="flex items-center text-gray-600">
               <Users className="mr-2 h-5 w-5" />
               <span>{event.attendees} attendees</span>
-            </div>
+            </div> */}
             <div className="flex items-center text-gray-600">
               <DollarSign className="mr-2 h-5 w-5" />
-              <span>${event.budget}</span>
+              <span>Rs. {event.budget}</span>
             </div>
             <div className="mt-4 inline-block px-4 py-2 bg-blue-500 text-white rounded-full text-sm font-semibold">
-              {event.eventType}
+              {event.eventtype}
             </div>
           </CardContent>
         </Card>

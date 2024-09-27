@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Sidebar } from '@/components/dashboard/Sidebar'
 import { EventOverview } from '@/components/dashboard/EventOverview'
@@ -10,18 +10,59 @@ import { VendorDirectory } from '@/components/dashboard/VendorDirectory'
 import { Messaging } from '@/components/dashboard/Messaging'
 import BudgetTrackerUser from '@/components/dashboard/BudgetTrackerUser'
 import BudgetTrackerAdmin from '@/components/dashboard/BudgetTrackerAdmin'
+import { BaseApiUrl } from '@/utils/constants'
 // import { BudgetTrackerAdmin } from '@/components/dashboard/BudgetTrackerAdmin'
+import { useSearchParams  } from "next/navigation";
+import EventPerticular from '@/components/dashboard/EventPerticular'
+
+
+
 
 export default function Dashboard() {
-  const [activeTab, setActiveTab] = useState('overview')
+  const searchParams = useSearchParams();
+const nav = searchParams.get('nav');
+
+
+
+
+  const [activeTab, setActiveTab] = useState(nav || 'overview')
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const [userData, setUserData] = useState([])
+
+
+
+
+  const userEventData = async () => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${BaseApiUrl}/user/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const json = await response.json();
+    if (json) {
+      console.log(json);
+      setUserData(json.user)
+
+    }
+
+  }
+
+
+  useEffect(() => {
+    userEventData()
+  }, [])
 
   const renderContent = () => {
     switch (activeTab) {
       case 'overview':
-        return <EventOverview />
+        return <EventOverview userdata={userData} />
       case 'tasks':
         return <TaskManager />
+      case 'event':
+        return <EventPerticular />
       case 'budgetuser':
         return <BudgetTrackerUser />
       case 'budgetadmin':
@@ -36,12 +77,11 @@ export default function Dashboard() {
         return <EventOverview />
     }
   }
-
   return (
     <div className="flex h-screen bg-gray-100">
-      <Sidebar 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
+      <Sidebar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
       />

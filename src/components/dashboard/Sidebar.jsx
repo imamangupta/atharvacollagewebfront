@@ -10,7 +10,7 @@ export function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOp
   const router = useRouter()
   const menuItems = [
     { icon: Home, label: 'Overview', id: 'overview' },
-    { icon: Calendar, label: 'Events', id: 'events' },
+    { icon: Calendar, label: 'Events', id: 'event' },
     { icon: CheckSquare, label: 'Tasks', id: 'tasks' },
     { icon: DollarSign, label: 'Budget User', id: 'budgetuser' },
     { icon: DollarSign, label: 'Budget Admin', id: 'budgetadmin' },
