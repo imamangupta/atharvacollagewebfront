@@ -6,7 +6,7 @@ import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 
 const VideoRoom = () => {
   const containerRef = useRef(null); // Reference for the video call container
-  const searchParams = useSearchParams();
+
   const [roomID, setRoomID] = useState(""); // State to manage the roomID
   const router = useRouter(); // Router instance to handle navigation
   useEffect(() => {
