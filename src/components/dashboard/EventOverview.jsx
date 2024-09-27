@@ -171,7 +171,7 @@ export function EventOverview({ userdata }) {
           }}
         >
           {myEvent.map((event, index) => (
-            <EventCard  event={event} index={index} />
+            <EventCard  event={event} key={index} index={index} />
           ))}
         </motion.div>
       </AnimatePresence>
