@@ -5,9 +5,12 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Sidebar } from '@/components/dashboard/Sidebar'
 import { EventOverview } from '@/components/dashboard/EventOverview'
 import { TaskManager } from '@/components/dashboard/TaskManager'
-import { BudgetTracker } from '@/components/dashboard/BudgetTracker'
+// import { BudgetTrackerUser } from '@/components/dashboard/BudgetTrackerUser'
 import { VendorDirectory } from '@/components/dashboard/VendorDirectory'
 import { Messaging } from '@/components/dashboard/Messaging'
+import BudgetTrackerUser from '@/components/dashboard/BudgetTrackerUser'
+import BudgetTrackerAdmin from '@/components/dashboard/BudgetTrackerAdmin'
+// import { BudgetTrackerAdmin } from '@/components/dashboard/BudgetTrackerAdmin'
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState('overview')
@@ -19,8 +22,10 @@ export default function Dashboard() {
         return <EventOverview />
       case 'tasks':
         return <TaskManager />
-      case 'budget':
-        return <BudgetTracker />
+      case 'budgetuser':
+        return <BudgetTrackerUser />
+      case 'budgetadmin':
+        return <BudgetTrackerAdmin />
       case 'vendors':
         return <VendorDirectory />
       case 'messages':
