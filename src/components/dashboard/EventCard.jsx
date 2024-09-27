@@ -1,0 +1,66 @@
+'use client'
+
+import { motion } from "framer-motion"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Calendar, MapPin, Users, DollarSign } from 'lucide-react'
+import Link from 'next/link'
+import Image from 'next/image'
+
+export function EventCard({ event, index }) {
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        type: "spring",
+        stiffness: 100,
+        damping: 15,
+        delay: index * 0.1 
+      }
+    }
+  }
+
+  return (
+    <motion.div variants={cardVariants}>
+      <Link href={`/event/${event.id}`}>
+        <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 transform hover:-translate-y-1">
+          <CardHeader className="relative p-0 h-48">
+            <Image
+              src={event.image}
+              alt={event.name}
+              layout="fill"
+              objectFit="cover"
+              className="rounded-t-lg"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+            <CardTitle className="absolute bottom-4 left-4 text-2xl font-bold text-white">
+              {event.name}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="mt-4 space-y-4">
+            <div className="flex items-center text-gray-600">4
+              <Calendar className="mr-2 h-5 w-5" />
+              <span>{event.date}</span>
+            </div>
+            <div className="flex items-center text-gray-600">
+              <MapPin className="mr-2 h-5 w-5" />
+              <span>{event.location}</span>
+            </div>
+            <div className="flex items-center text-gray-600">
+              <Users className="mr-2 h-5 w-5" />
+              <span>{event.attendees} attendees</span>
+            </div>
+            <div className="flex items-center text-gray-600">
+              <DollarSign className="mr-2 h-5 w-5" />
+              <span>${event.budget}</span>
+            </div>
+            <div className="mt-4 inline-block px-4 py-2 bg-blue-500 text-white rounded-full text-sm font-semibold">
+              {event.eventType}
+            </div>
+          </CardContent>
+        </Card>
+      </Link>
+    </motion.div>
+  )
+}
