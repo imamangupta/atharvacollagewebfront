@@ -72,13 +72,18 @@ export function Header() {
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <Link href="/dashboard" legacyBehavior passHref>
-                    <NavigationMenuLink className="font-medium">
-                      Dashboard
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
+                {
+                  isAuthenticated ? <>
+                    <NavigationMenuItem>
+                      <Link href="/dashboard" legacyBehavior passHref>
+                        <NavigationMenuLink className="font-medium">
+                          Dashboard
+                        </NavigationMenuLink>
+                      </Link>
+                    </NavigationMenuItem>
+                  </> : ""
+                }
+
               </NavigationMenuList>
             </NavigationMenu>
             {
