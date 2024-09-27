@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Sidebar } from '@/components/dashboard/Sidebar'
 import { EventOverview } from '@/components/dashboard/EventOverview'
@@ -13,15 +13,15 @@ import BudgetTrackerAdmin from '@/components/dashboard/BudgetTrackerAdmin'
 import { BaseApiUrl } from '@/utils/constants'
 import VendorDirectory from '@/components/dashboard/VendorDirectory'
 // import { BudgetTrackerAdmin } from '@/components/dashboard/BudgetTrackerAdmin'
-import { useSearchParams  } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import EventPerticular from '@/components/dashboard/EventPerticular'
-
+import { Suspense } from 'react';
 
 
 
 export default function Dashboard() {
   const searchParams = useSearchParams();
-const nav = searchParams.get('nav');
+  const nav = searchParams.get('nav');
 
 
 
@@ -95,7 +95,9 @@ const nav = searchParams.get('nav');
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.3 }}
           >
-            {renderContent()}
+            <Suspense fallback={<div>Loading...</div>}>
+              {renderContent()}
+            </Suspense>
           </motion.div>
         </AnimatePresence>
       </main>
