@@ -1,7 +1,7 @@
 "use client"; // Ensure the component runs on the client side
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation"; // Next.js hook to get URL search parameters
+import { useRouter } from "next/navigation"; // Next.js hook to get URL search parameters
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 
 const VideoRoom = () => {
