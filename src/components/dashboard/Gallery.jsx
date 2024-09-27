@@ -4,55 +4,111 @@ import React, { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { motion, AnimatePresence } from "framer-motion"
 import { Download, Upload, ChevronLeft, ChevronRight } from "lucide-react"
+import {  useSelector } from 'react-redux';
 
 const dummyImages = [
-  { id: 1, url: "/placeholder.svg?height=300&width=200", aspectRatio: 2/3 },
-  { id: 2, url: "/placeholder.svg?height=300&width=300", aspectRatio: 1 },
-  { id: 3, url: "/placeholder.svg?height=300&width=400", aspectRatio: 4/3 },
-  { id: 4, url: "/placeholder.svg?height=400&width=300", aspectRatio: 3/4 },
-  { id: 5, url: "/placeholder.svg?height=300&width=200", aspectRatio: 2/3 },
-  { id: 6, url: "/placeholder.svg?height=300&width=300", aspectRatio: 1 },
-  { id: 7, url: "/placeholder.svg?height=300&width=400", aspectRatio: 4/3 },
-  { id: 8, url: "/placeholder.svg?height=400&width=300", aspectRatio: 3/4 },
-  { id: 9, url: "/placeholder.svg?height=300&width=200", aspectRatio: 2/3 },
-  { id: 10, url: "/placeholder.svg?height=300&width=300", aspectRatio: 1 },
-  { id: 11, url: "/placeholder.svg?height=300&width=400", aspectRatio: 4/3 },
-  { id: 12, url: "/placeholder.svg?height=400&width=300", aspectRatio: 3/4 },
-  { id: 13, url: "/placeholder.svg?height=300&width=200", aspectRatio: 2/3 },
-  { id: 14, url: "/placeholder.svg?height=300&width=300", aspectRatio: 1 },
-  { id: 15, url: "/placeholder.svg?height=300&width=400", aspectRatio: 4/3 },
+  // { id: 1, url: "/placeholder.svg?height=300&width=200", aspectRatio: 2/3 },
+  // { id: 2, url: "/placeholder.svg?height=300&width=300", aspectRatio: 1 },
+  // { id: 3, url: "/placeholder.svg?height=300&width=400", aspectRatio: 4/3 },
+  // { id: 4, url: "/placeholder.svg?height=400&width=300", aspectRatio: 3/4 },
+  // { id: 5, url: "/placeholder.svg?height=300&width=200", aspectRatio: 2/3 },
+
 ]
 
-const ITEMS_PER_PAGE = 10
+const ITEMS_PER_PAGE = 100
 
 export default function Gallery() {
+
+
+  const dataquesiton = useSelector((store) => store.eventid);
   const [images, setImages] = useState(dummyImages)
   const [currentPage, setCurrentPage] = useState(1)
+  const usermydata = useSelector((store) => store.userdata);
 
-  const handleImageUpload = (event) => {
-    const files = Array.from(event.target.files)
-    const newImages = files.map((file, index) => {
+  const handleImageUpload = async (event) => {
+    const files = Array.from(event.target.files); // Convert files to an array
+  
+    if (!files.length) {
+      return console.log('No files selected');
+    }
+  
+    // Prepare the promises for uploading each image to Cloudinary
+    const uploadPromises = files.map(async (file) => {
+      const data = new FormData();
+      data.append('file', file);
+      data.append('upload_preset', 'kfdvzoaz');
+      data.append('cloud_name', 'dggd6cvzh');
+  
+      try {
+        const res = await fetch('https://api.cloudinary.com/v1_1/dggd6cvzh/image/upload', {
+          method: 'POST',
+          body: data,
+        });
+  
+        const cloudData = await res.json();
+  
+        // Send the image URL to your backend after uploading to Cloudinary
+        const response = await fetch('http://localhost:4000/api/gallery', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            eventid: dataquesiton,  // Replace with your actual event ID
+            imgurl: cloudData.url,
+            userid: usermydata.id,  // Replace with your actual user ID
+          }),
+        });
+  
+        const json = await response.json();
+        if (json) {
+          console.log('Successfully updated data:', json);
+        }
+  
+        return cloudData; // Return the cloudData for further use
+      } catch (error) {
+        console.error('Error uploading file:', file.name, error);
+        return null; // Handle errors gracefully
+      }
+    });
+  
+    // Wait for all the image upload promises to complete
+    const uploadedImages = await Promise.all(uploadPromises);
+    const successfulUploads = uploadedImages.filter(Boolean); // Remove any failed uploads (null values)
+  
+    // Use FileReader to preview the uploaded images
+    const previewPromises = files.map((file, index) => {
       return new Promise((resolve) => {
-        const reader = new FileReader()
+        const reader = new FileReader();
         reader.onload = (e) => {
-          const img = new Image()
+          const img = new Image();
           img.onload = () => {
             resolve({
-              id: images.length + index + 1,
-              url: e.target.result,
+              id: index + 1,  // You can improve this ID logic if needed
+              imgurl: e.target.result,
               aspectRatio: img.width / img.height,
-            })
-          }
-          img.src = e.target.result
-        }
-        reader.readAsDataURL(file)
-      })
-    })
-
-    Promise.all(newImages).then((uploadedImages) => {
-      setImages((prevImages) => [...prevImages, ...uploadedImages])
-    })
-  }
+            });
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+  
+    const previews = await Promise.all(previewPromises);
+  
+    // Update the state with both successful uploads and image previews
+    setImages((prevImages) => [
+      ...prevImages,
+      ...previews.map((preview, index) => ({
+        ...preview,
+        cloudinaryData: successfulUploads[index],  // Attach cloudinary data for further use
+      })),
+    ]);
+  
+    console.log('All images uploaded and previewed:', previews);
+  };
+  
 
   const handleDownload = (imageUrl) => {
     const link = document.createElement("a")
@@ -72,6 +128,27 @@ export default function Gallery() {
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage)
   }
+
+
+  const fetchImages = async()=>{
+    const response = await fetch(`http://localhost:4000/api/gallery`, {
+      method: 'GET',
+      headers: {
+        'eventid': dataquesiton
+      },
+    })
+    const json = await response.json()
+
+    if (json.data) {
+      console.log('userdata',json);
+      setImages(json.data)
+    }
+  }
+
+  useEffect(() => {
+    fetchImages()
+  }, [])
+
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -110,7 +187,7 @@ export default function Gallery() {
             >
               <div className="relative group">
                 <img
-                  src={image.url}
+                  src={image.imgurl}
                   alt={`Gallery image ${image.id}`}
                   className="w-full rounded-lg shadow-md"
                   style={{
@@ -132,32 +209,6 @@ export default function Gallery() {
           ))}
         </AnimatePresence>
       </motion.div>
-
-      <div className="flex justify-center items-center mt-8 space-x-2">
-        <Button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          variant="outline"
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </Button>
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-          <Button
-            key={page}
-            onClick={() => handlePageChange(page)}
-            variant={currentPage === page ? "default" : "outline"}
-          >
-            {page}
-          </Button>
-        ))}
-        <Button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          variant="outline"
-        >
-          <ChevronRight className="h-4 w-4" />
-        </Button>
-      </div>
     </div>
   )
 }
