@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { motion } from "framer-motion";
 
-const Gallary = () => {
+const Gallery = () => {
   const [images, setImages] = useState([
     {
       url: "https://images.pexels.com/photos/1525041/pexels-photo-1525041.jpeg?cs=srgb&dl=pexels-francesco-ungaro-1525041.jpg&fm=jpg",
@@ -92,4 +92,4 @@ const Gallary = () => {
   );
 };
 
-export default Gallary;
+export default Gallery;

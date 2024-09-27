@@ -15,6 +15,7 @@ import VendorDirectory from '@/components/dashboard/VendorDirectory'
 // import { BudgetTrackerAdmin } from '@/components/dashboard/BudgetTrackerAdmin'
 import { useSearchParams  } from "next/navigation";
 import EventPerticular from '@/components/dashboard/EventPerticular'
+import Gallery from '@/components/dashboard/Gallery'
 
 
 
@@ -74,6 +75,8 @@ const nav = searchParams.get('nav');
         return <Messaging />
       case 'videocall':
         return <Messaging />
+      case 'gallery':
+        return <Gallery />
       default:
         return <EventOverview />
     }
