@@ -70,7 +70,7 @@ export function Header() {
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
-            {
+            {/* {
               !localStorage?.getItem('token') ? <>
 
                 <Button variant="ghost" asChild>
@@ -80,7 +80,7 @@ export function Header() {
                   <Link href="/signup">Sign up</Link>
                 </Button>
               </> : ""
-            }
+            } */}
           </div>
           <div className="md:hidden">
             <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
