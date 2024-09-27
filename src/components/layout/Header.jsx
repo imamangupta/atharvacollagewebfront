@@ -71,7 +71,7 @@ export function Header() {
               </NavigationMenuList>
             </NavigationMenu>
             {
-              !localStorage.getItem('token') ? <>
+              !localStorage?.getItem('token') ? <>
 
                 <Button variant="ghost" asChild>
                   <Link href='/login'>Login</Link>
