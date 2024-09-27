@@ -10,9 +10,12 @@ import { CreateEventModal } from './CreateEventModal'
 import { Toaster, toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { BaseApiUrl } from '@/utils/constants'
+import { useDispatch } from 'react-redux'
+import { addEvent } from '@/app/redux/slice'
 
 export function EventOverview({ userdata }) {
   const router = useRouter()
+  const dispatch = useDispatch();
   const [events, setEvents] = useState([
     {
       id: 1,
@@ -43,10 +46,19 @@ export function EventOverview({ userdata }) {
   const handleJoinEvent = async (code) => {
     setIsLoading(true)
     try {
-      // Simulating join event action
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      toast.success(`Joined event with code: ${code}`)
-      setIsJoinModalOpen(false)
+      const response = await fetch(`${BaseApiUrl}/joinevent/member`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ memberid: userdata.id, otpdegit:code })
+      })
+      const json = await response.json()
+      if (json) {
+        
+        toast.success(`Joined event with code: ${code}`)
+        setIsJoinModalOpen(false)
+      }
     } catch (error) {
       console.error('Failed to join event:', error)
       toast.error("Failed to join event. Please try again.")
@@ -120,11 +132,15 @@ export function EventOverview({ userdata }) {
     })
     const json = await response.json()
 
-    if (json) {
+    if (json.data) {
       console.log('userdata',userdata);
       
       console.log('event',json);
       setMyEvent(json.data)
+      console.log(json.data[0]._id);
+      // localStorage.setItem('token', json.data.token)
+      dispatch(addEvent(json.data[0]._id))
+      localStorage.getItem('eventid',json.data[0]._id)
     }
   }
 
