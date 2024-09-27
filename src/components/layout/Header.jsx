@@ -18,7 +18,7 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
-    <motion.header 
+    <motion.header
       className="bg-white shadow-md fixed w-full z-50"
       initial={{ opacity: 0, y: -50 }}
       animate={{ opacity: 1, y: 0 }}
@@ -71,7 +71,7 @@ export function Header() {
               </NavigationMenuList>
             </NavigationMenu>
             <Button variant="ghost" asChild>
-              <Link href="/login">Login</Link>
+              <Link href='/login'>Login</Link>
             </Button>
             <Button variant="default" className="bg-indigo-600 hover:bg-indigo-700" asChild>
               <Link href="/join">Join Now</Link>
@@ -85,7 +85,7 @@ export function Header() {
         </div>
       </div>
       {isMenuOpen && (
-        <motion.div 
+        <motion.div
           className="md:hidden bg-white py-4"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
