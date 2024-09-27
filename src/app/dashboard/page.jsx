@@ -16,14 +16,15 @@ import VendorDirectory from '@/components/dashboard/VendorDirectory'
 import { useSearchParams } from "next/navigation";
 import EventPerticular from '@/components/dashboard/EventPerticular'
 import Gallery from '@/components/dashboard/Gallery'
-
-
+import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
+import { addUser } from '@/app/redux/slice'
 
 
 export default function Dashboard() {
   const searchParams = useSearchParams();
   const nav = searchParams.get('nav');
-
+  const dispatch = useDispatch();
 
 
 
@@ -44,9 +45,10 @@ export default function Dashboard() {
       },
     });
     const json = await response.json();
-    if (json) {
+    if (json.user) {
       console.log(json);
-      setUserData(json.user)
+      setUserData(json?.user)
+      dispatch(addUser(json?.user))
 
     }
 
@@ -60,7 +62,7 @@ export default function Dashboard() {
   const renderContent = () => {
     switch (activeTab) {
       case 'overview':
-        return <EventOverview userdata={userData} />
+        return <EventOverview  />
       case 'tasks':
         return <TaskManager />
       case 'event':
@@ -78,7 +80,7 @@ export default function Dashboard() {
       case 'gallery':
         return <Gallery />
       default:
-        return <EventOverview />
+        return <EventOverview userdata={userData} />
     }
   }
   return (

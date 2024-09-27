@@ -12,32 +12,16 @@ import { useRouter } from 'next/navigation'
 import { BaseApiUrl } from '@/utils/constants'
 import { useDispatch } from 'react-redux'
 import { addEvent } from '@/app/redux/slice'
+import {  useSelector } from 'react-redux';
 
-export function EventOverview({ userdata }) {
+export function EventOverview() {
   const router = useRouter()
   const dispatch = useDispatch();
-  const [events, setEvents] = useState([
-    {
-      id: 1,
-      name: 'Summer Wedding',
-      date: 'August 15, 2023',
-      attendees: 75,
-      budget: 25000,
-      location: 'Sunset Beach Resort',
-      eventType: 'wedding',
-      image: ''
-    },
-    {
-      id: 2,
-      name: 'Tech Conference 2023',
-      date: 'September 22, 2023',
-      attendees: 500,
-      budget: 100000,
-      location: 'Downtown Convention Center',
-      eventType: 'conference',
-      image: ''
-    },
-  ])
+  const usermydata = useSelector((store) => store.userdata);
+  console.log(usermydata);
+  let userdata = usermydata
+  
+
   const [myEvent, setMyEvent] = useState([])
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
@@ -92,7 +76,7 @@ export function EventOverview({ userdata }) {
       const cloudData = await res.json();
 
 
-      console.log(userdata);
+      // console.log(userdata);
 
       const response = await fetch(`${BaseApiUrl}/event`, {
         method: 'POST',
@@ -127,27 +111,27 @@ export function EventOverview({ userdata }) {
     const response = await fetch(`${BaseApiUrl}/event`, {
       method: 'GET',
       headers: {
-        'userid': userdata?.id
+        'userid': usermydata?.id
       },
     })
     const json = await response.json()
 
     if (json.data) {
-      console.log('userdata',userdata);
+      // console.log('userdata',userdata);
       
-      console.log('event',json);
+      // console.log('event',json);
       setMyEvent(json.data)
-      console.log(json.data[0]._id);
+      // console.log(json.data[0]._id);
       // localStorage.setItem('token', json.data.token)
-      dispatch(addEvent(json.data[0]._id))
-      localStorage.getItem('eventid',json.data[0]._id)
+      dispatch(addEvent(json.data[0]?._id))
+      // localStorage.getItem('eventid',json.data[0]._id)
     }
   }
 
 
   useEffect(() => {
     fetchEvent()
-  }, [])
+  }, [usermydata])
 
 
   return (
