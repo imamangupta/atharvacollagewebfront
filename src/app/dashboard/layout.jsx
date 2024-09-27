@@ -3,9 +3,9 @@
 export default function Layout({ children }) {
   return (
     <>
-        {/* <Suspense fallback={<div>Loading...</div>}> */}
+        <Suspense fallback={<div>Loading...</div>}>
       <main>{children}</main>
-        {/* </Suspense> */}
+        </Suspense>
      
       
     </>
