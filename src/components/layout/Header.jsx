@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
@@ -13,9 +13,20 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
 import { Menu, X } from 'lucide-react'
+import { checkToken } from '@/utils/checkToken'
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+
+
+  useEffect(() => {
+    const verifyToken = async () => {
+      const tokenValid = await checkToken()
+      setIsAuthenticated(tokenValid)
+    }
+    verifyToken()
+  }, [])
 
   return (
     <motion.header
@@ -70,8 +81,8 @@ export function Header() {
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
-            {/* {
-              !localStorage?.getItem('token') ? <>
+            {
+              !isAuthenticated ? <>
 
                 <Button variant="ghost" asChild>
                   <Link href='/login'>Login</Link>
@@ -80,7 +91,7 @@ export function Header() {
                   <Link href="/signup">Sign up</Link>
                 </Button>
               </> : ""
-            } */}
+            }
           </div>
           <div className="md:hidden">
             <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
