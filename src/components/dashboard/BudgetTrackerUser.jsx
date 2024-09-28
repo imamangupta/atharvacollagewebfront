@@ -153,16 +153,24 @@ export default function BudgetTrackerUser() {
   }
 
   const openCamera = async (type) => {
-    setCurrentPhotoType(type)
-    setIsCameraOpen(true)
+    setCurrentPhotoType(type);
+    setIsCameraOpen(true);
+  
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true })
-      videoRef.current.srcObject = stream
-      videoRef.current.play()
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: { exact: 'environment' }, // Requests the back camera
+        },
+      });
+  
+      // Set the video stream to the video element
+      videoRef.current.srcObject = stream;
+      videoRef.current.play();
     } catch (err) {
-      console.error("Error accessing the camera", err)
+      console.error("Error accessing the camera", err);
     }
-  }
+  };
+  
 
   const capturePhoto = () => {
     const video = videoRef.current
