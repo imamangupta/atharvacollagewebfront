@@ -124,7 +124,7 @@ export default function BudgetTrackerUser() {
       },
       body: JSON.stringify({
         billtitle: newBill.title, amount: newBill.amount, category: newBill.category, whichdate: newBill.date,
-        description: newBill.description, billphote: cloudData.url, productphoto: cloudData2.url, eventid: dataquesiton, userid: usermydata.id,status:'panding',username:usermydata.userName
+        description: newBill.description, billphote: cloudData.url, productphoto: cloudData2.url, eventid: dataquesiton, userid: usermydata.id,status:'pending',username:usermydata.userName
       })
     });
 
