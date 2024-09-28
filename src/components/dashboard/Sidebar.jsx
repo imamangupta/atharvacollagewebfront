@@ -29,12 +29,12 @@ export function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOp
 
   ]
 
-  if (data === usermydata.id) {
-    menuItems = menuItems.filter(item => item.id !== 'budgetuser');
-  }
-  if (data !== usermydata.id) {
-    menuItems = menuItems.filter(item => item.id !== 'budgetadmin');
-  }
+  // if (data === usermydata.id) {
+  //   menuItems = menuItems.filter(item => item.id !== 'budgetuser');
+  // }
+  // if (data !== usermydata.id) {
+  //   menuItems = menuItems.filter(item => item.id !== 'budgetadmin');
+  // }
 
 
   const logout =()=>{
