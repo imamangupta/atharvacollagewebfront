@@ -13,6 +13,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { motion, AnimatePresence } from 'framer-motion'
+import { useSelector } from 'react-redux';
+import { BaseApiUrl } from '@/utils/constants'
 
 // Dummy database
 const initialBills = [
@@ -23,6 +25,12 @@ const initialBills = [
 const categories = ['Stationery', 'Food', 'Software', 'Travel', 'Miscellaneous']
 
 export default function BudgetTrackerUser() {
+
+  const dataquesiton = useSelector((store) => store.eventid);
+  const usermydata = useSelector((store) => store.userdata);
+  console.log(usermydata);
+  
+
   const [budget, setBudget] = useState(1000000) // 10 Lakh INR
   const [spent, setSpent] = useState(600000)
   const [bills, setBills] = useState(initialBills)
@@ -39,7 +47,8 @@ export default function BudgetTrackerUser() {
   const currentUser = {
     name: 'Rahul Sharma',
     email: 'rahul.sharma@example.com',
-    avatar: '/placeholder.svg?height=100&width=100'
+    avatar: '/placeholder.svg?height=100&width=100',
+    userid:usermydata?.id
   }
 
   useEffect(() => {
@@ -47,8 +56,17 @@ export default function BudgetTrackerUser() {
     setBills(initialBills)
   }, [])
 
-  const addNewBill = () => {
+  const addNewBill = async () => {
+
+
+    console.log('asdfkjaldsf workingldsakfj');
+
+
+
+
+    // e.preventDefault()
     // In a real app, you'd send this to a server
+
     const billToAdd = {
       ...newBill,
       id: bills.length + 1,
@@ -58,6 +76,75 @@ export default function BudgetTrackerUser() {
       billPhoto: billPhoto || 'https://via.placeholder.com/100?text=Bill+Photo',
       productPhoto: productPhoto || 'https://via.placeholder.com/100?text=Product+Photo'
     }
+    console.log(billToAdd);
+
+     const data = new FormData();
+
+      data.append("file", billPhoto);
+      data.append("upload_preset", "kfdvzoaz");
+      data.append("cloud_name", "dggd6cvzh");
+      // CLOUDINARY_URL=cloudinary://383736856582798:VATPzuynv5I_0lkdHMdnrYNakYk@dggd6cvzh
+
+
+      if (billPhoto === null) {
+        return console.log('work..');
+      }
+
+      const res = await fetch('https://api.cloudinary.com/v1_1/dggd6cvzh/image/upload', {
+        method: "POST",
+        body: data
+      })
+      const cloudData = await res.json();
+
+     const data2 = new FormData();
+
+      data2.append("file", productPhoto);
+      data2.append("upload_preset", "kfdvzoaz");
+      data2.append("cloud_name", "dggd6cvzh");
+      // CLOUDINARY_URL=cloudinary://383736856582798:VATPzuynv5I_0lkdHMdnrYNakYk@dggd6cvzh
+
+
+      if (productPhoto === null) {
+        return console.log('work..');
+      }
+
+      const res2 = await fetch('https://api.cloudinary.com/v1_1/dggd6cvzh/image/upload', {
+        method: "POST",
+        body: data
+      })
+      const cloudData2 = await res2.json();
+
+
+
+
+    const response = await fetch(`${BaseApiUrl}/bill`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        billtitle: newBill.title, amount: newBill.amount, category: newBill.category, whichdate: newBill.date,
+        description: newBill.description, billphote: cloudData.url, productphoto: cloudData2.url, eventid: dataquesiton, userid: usermydata.id,status:'panding',username:usermydata.userName
+      })
+    });
+
+    const json = await response.json();
+
+    if (json) {
+
+      console.log(json);
+      setBills(json.data)
+
+
+
+    }
+
+
+
+
+
+
+
     setBills([...bills, billToAdd])
     setIsAddingBill(false)
     setNewBill({ title: '', amount: '', description: '', category: '', date: '' })
@@ -100,13 +187,35 @@ export default function BudgetTrackerUser() {
     setCurrentPhotoType(null)
   }
 
-  const myBills = bills.filter(bill => bill.username === currentUser.name)
-  const otherBills = bills.filter(bill => bill.username !== currentUser.name)
+  const myBills = bills.filter(bill => bill.userid === currentUser.userid)
+  const otherBills = bills.filter(bill => bill)
+
+
+  const fetchmybill = async()=>{
+    const response = await fetch(`http://localhost:4000/api/bill`, {
+      method: 'GET',
+      headers: {
+        'eventid': dataquesiton
+      },
+    })
+    const json = await response.json()
+
+    if (json.data) {
+     console.log(json);
+     setBills(json.data)
+     
+    }
+  }
+
+  useEffect(() => {
+    fetchmybill()
+  }, [])
+  
 
   return (
-    <motion.div 
-      initial={{ opacity: 0 }} 
-      animate={{ opacity: 1 }} 
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
       className="p-4 max-w-7xl mx-auto bg-white"
     >
@@ -182,6 +291,7 @@ export default function BudgetTrackerUser() {
                 <Table>
                   <TableHeader>
                     <TableRow>
+                      <TableHead className="text-indigo-700">Name</TableHead>
                       <TableHead className="text-indigo-700">Title</TableHead>
                       <TableHead className="text-indigo-700">Amount</TableHead>
                       <TableHead className="text-indigo-700">Category</TableHead>
@@ -192,7 +302,8 @@ export default function BudgetTrackerUser() {
                   <TableBody>
                     {myBills.map((bill) => (
                       <TableRow key={bill.id}>
-                        <TableCell>{bill.title}</TableCell>
+                        <TableCell>{bill.username}</TableCell>
+                        <TableCell>{bill.billtitle}</TableCell>
                         <TableCell>₹{bill.amount.toLocaleString('en-IN')}</TableCell>
                         <TableCell>{bill.category}</TableCell>
                         <TableCell>{new Date(bill.date).toLocaleDateString('en-IN')}</TableCell>
@@ -234,7 +345,7 @@ export default function BudgetTrackerUser() {
                     {otherBills.map((bill) => (
                       <TableRow key={bill.id}>
                         <TableCell>{bill.username}</TableCell>
-                        <TableCell>{bill.title}</TableCell>
+                        <TableCell>{bill.billtitle}</TableCell>
                         <TableCell>₹{bill.amount.toLocaleString('en-IN')}</TableCell>
                         <TableCell>{bill.category}</TableCell>
                         <TableCell>{new Date(bill.date).toLocaleDateString('en-IN')}</TableCell>
@@ -254,29 +365,30 @@ export default function BudgetTrackerUser() {
           <DialogHeader>
             <DialogTitle className="text-indigo-700">Add New Bill</DialogTitle>
           </DialogHeader>
+
           <div className="space-y-4 mt-4">
             <div className="space-y-2">
               <Label htmlFor="title" className="text-indigo-600">Bill Title</Label>
-              <Input 
+              <Input
                 id="title"
-                value={newBill.title} 
-                onChange={(e) => setNewBill({...newBill, title: e.target.value})}
+                value={newBill.title}
+                onChange={(e) => setNewBill({ ...newBill, title: e.target.value })}
                 className="border-indigo-300 focus:border-indigo-500"
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="amount" className="text-indigo-600">Amount (INR)</Label>
-              <Input 
+              <Input
                 id="amount"
-                type="number" 
-                value={newBill.amount} 
-                onChange={(e) => setNewBill({...newBill, amount: e.target.value})}
+                type="number"
+                value={newBill.amount}
+                onChange={(e) => setNewBill({ ...newBill, amount: e.target.value })}
                 className="border-indigo-300 focus:border-indigo-500"
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="category" className="text-indigo-600">Category</Label>
-              <Select value={newBill.category} onValueChange={(value) => setNewBill({...newBill, category: value})}>
+              <Select value={newBill.category} onValueChange={(value) => setNewBill({ ...newBill, category: value })}>
                 <SelectTrigger className="border-indigo-300 focus:border-indigo-500">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
@@ -289,20 +401,20 @@ export default function BudgetTrackerUser() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="date" className="text-indigo-600">Date</Label>
-              <Input 
+              <Input
                 id="date"
-                type="date" 
-                value={newBill.date} 
-                onChange={(e) => setNewBill({...newBill, date: e.target.value})}
+                type="date"
+                value={newBill.date}
+                onChange={(e) => setNewBill({ ...newBill, date: e.target.value })}
                 className="border-indigo-300 focus:border-indigo-500"
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="description" className="text-indigo-600">Description</Label>
-              <Textarea 
+              <Textarea
                 id="description"
-                value={newBill.description} 
-                onChange={(e) => setNewBill({...newBill, description: e.target.value})}
+                value={newBill.description}
+                onChange={(e) => setNewBill({ ...newBill, description: e.target.value })}
                 className="border-indigo-300 focus:border-indigo-500"
               />
             </div>
@@ -317,12 +429,12 @@ export default function BudgetTrackerUser() {
             {(billPhoto || productPhoto) && (
               <div className="flex justify-between">
                 {billPhoto && <img src={billPhoto} alt="Bill" className="w-1/2 h-auto" />}
-                {productPhoto && <img src={productPhoto} alt="Product" className="w-1/2 h-auto"  />}
+                {productPhoto && <img src={productPhoto} alt="Product" className="w-1/2 h-auto" />}
               </div>
             )}
           </div>
           <DialogFooter>
-            <Button onClick={addNewBill} className="w-full bg-indigo-600 hover:bg-indigo-700">Submit Bill</Button>
+            <Button onClick={addNewBill} type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700">Submit Bill</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

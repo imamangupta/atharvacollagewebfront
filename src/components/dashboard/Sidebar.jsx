@@ -5,10 +5,18 @@ import { motion } from 'framer-motion'
 import { Home, Calendar, CheckSquare, DollarSign, Users, MessageSquare, ChevronLeft, ChevronRight, Video , Images } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { BaseApiUrl } from '@/utils/constants'
+import { useSelector } from 'react-redux';
 
 export function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOpen }) {
+
+  const usermydata = useSelector((store) => store.userdata);
+  const dataquesiton = useSelector((store) => store.eventid);
+  const [data, setdata] = useState('')
+
   const router = useRouter()
-  const menuItems = [
+  let menuItems = [
     { icon: Home, label: 'Overview', id: 'overview' },
     { icon: Calendar, label: 'Events', id: 'event' },
     { icon: CheckSquare, label: 'Tasks', id: 'tasks' },
@@ -21,11 +29,43 @@ export function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsSidebarOp
 
   ]
 
+  if (data === usermydata.id) {
+    menuItems = menuItems.filter(item => item.id !== 'budgetuser');
+  }
+  if (data !== usermydata.id) {
+    menuItems = menuItems.filter(item => item.id !== 'budgetadmin');
+  }
+
 
   const logout =()=>{
     localStorage.clear()
     router.push("/")
   }
+
+  const fetchevent = async()=>{
+    const response = await fetch(`${BaseApiUrl}/event/id`, {
+      method: 'GET',
+      headers: {
+        'eventid': dataquesiton
+      },
+    })
+    const json = await response.json()
+
+    if (json) {
+      console.log('sidebar',json);
+      setdata(json?.data?.createdby)
+     
+      
+    }
+  }
+
+  useEffect(() => {
+    fetchevent()
+   
+  }, [dataquesiton])
+  
+
+
 
   return (
     <motion.aside 

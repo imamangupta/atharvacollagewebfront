@@ -12,6 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts'
 import { motion } from 'framer-motion'
+import { useSelector } from 'react-redux';
+import { BaseApiUrl } from '@/utils/constants'
 
 // Dummy database
 const initialBills = [
@@ -23,6 +25,9 @@ const initialBills = [
 const categories = ['Stationery', 'Food', 'Software', 'Travel', 'Miscellaneous']
 
 export default function BudgetTrackerAdmin() {
+
+  const dataquesiton = useSelector((store) => store.eventid);
+
   const [budget, setBudget] = useState(1000000) // 10 Lakh INR
   const [spent, setSpent] = useState(600000)
   const [bills, setBills] = useState(initialBills)
@@ -80,6 +85,27 @@ export default function BudgetTrackerAdmin() {
     setBudget(newBudget)
     setIsEditingBudget(false)
   }
+
+  const fetchallbills = async()=>{
+    const response = await fetch(`${BaseApiUrl}/bill`, {
+      method: 'GET',
+      headers: {
+        'eventid': dataquesiton
+      },
+    })
+    const json = await response.json()
+
+    if (json.data) {
+     console.log(json);
+     setBills(json.data)
+     
+    }
+  }
+
+  useEffect(() => {
+    fetchallbills()
+  }, [])
+  
 
   return (
     <motion.div 
@@ -252,9 +278,9 @@ export default function BudgetTrackerAdmin() {
             <p><strong className="text-indigo-600">Description:</strong> {selectedBill?.description}</p>
             <div className="mt-4 space-y-2">
               <p><strong className="text-indigo-600">Bill Photo:</strong></p>
-              <img src={selectedBill?.billPhoto} alt="Bill" className="w-full h-auto" />
+              <img src={selectedBill?.billphote} alt="Bill" className="w-full h-auto" />
               <p><strong className="text-indigo-600">Product Photo:</strong></p>
-              <img src={selectedBill?.productPhoto} alt="Product" className="w-full h-auto" />
+              <img src={selectedBill?.productphoto} alt="Product" className="w-full h-auto" />
             </div>
           </div>
         </DialogContent>
