@@ -28,14 +28,18 @@ export default function BudgetTrackerAdmin() {
 
   const dataquesiton = useSelector((store) => store.eventid);
 
-  const [budget, setBudget] = useState(1000000) // 10 Lakh INR
-  const [spent, setSpent] = useState(600000)
+  const [dataevent, setdataevent] = useState()
+  const [budget, setBudget] = useState(dataevent || 0) // 10 Lakh INR
+  const [spent, setSpent] = useState(0)
   const [bills, setBills] = useState(initialBills)
   const [selectedBill, setSelectedBill] = useState(null)
   const [filterCategory, setFilterCategory] = useState('All')
   const [sortBy, setSortBy] = useState('date')
   const [isEditingBudget, setIsEditingBudget] = useState(false)
   const [newBudget, setNewBudget] = useState(budget)
+
+  
+  const [userdata, setuserdata] = useState([])
 
   useEffect(() => {
     // This would be an API call in a real application
@@ -102,8 +106,26 @@ export default function BudgetTrackerAdmin() {
     }
   }
 
+  
+  const fetchalldata = async () => {
+    const response = await fetch(`${BaseApiUrl}/event/all`, {
+      method: 'GET',
+      headers: {
+        'eventid': dataquesiton
+      },
+    })
+    const json = await response.json()
+
+    if (json) {
+      console.log(json);
+      setuserdata(json.newdata)
+      setdataevent(json.data)
+    }
+  }
+
   useEffect(() => {
     fetchallbills()
+    fetchalldata()
   }, [])
   
 
@@ -134,12 +156,12 @@ export default function BudgetTrackerAdmin() {
                 <div className="flex justify-between items-end">
                   <div>
                     <p className="text-sm text-indigo-500">Total Budget</p>
-                    <p className="text-2xl font-bold text-indigo-700">₹{budget.toLocaleString('en-IN')}</p>
+                    <p className="text-2xl font-bold text-indigo-700">₹{dataevent?.budget}</p>
                   </div>
-                  <div className="text-right">
+                  {/* <div className="text-right">
                     <p className="text-sm text-indigo-500">Spent</p>
                     <p className="text-2xl font-bold text-indigo-700">₹{spent.toLocaleString('en-IN')}</p>
-                  </div>
+                  </div> */}
                 </div>
                 <Progress value={(spent / budget) * 100} className="h-2 bg-indigo-100" indicatorClassName="bg-indigo-600" />
                 <p className="text-sm text-indigo-500 text-center">

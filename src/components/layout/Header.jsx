@@ -44,7 +44,7 @@ export function Header() {
                 <NavigationMenuItem>
                   <NavigationMenuTrigger>Features</NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                    {/* <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
                       <li className="row-span-3">
                         <NavigationMenuLink asChild>
                           <a
@@ -69,7 +69,7 @@ export function Header() {
                       <ListItem href="/dashboard/vendors" title="Vendor Directory">
                         Find and manage event vendors
                       </ListItem>
-                    </ul>
+                    </ul> */}
                   </NavigationMenuContent>
                 </NavigationMenuItem>
                 {

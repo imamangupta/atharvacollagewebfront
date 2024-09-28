@@ -75,9 +75,9 @@ const AddTaskForm = ({ onClose, onAddTask, users }) => {
                 <SelectValue placeholder="Select a user" />
               </SelectTrigger>
               <SelectContent position="popper" sideOffset={5}>
-                {users.map((user) => (
-                  <SelectItem key={user.id} value={user.name}>
-                    {user.name}
+                {users.map((user,index) => (
+                  <SelectItem key={index} value={user?.userName}>
+                    {user?.userName}
                   </SelectItem>
                 ))}
               </SelectContent>

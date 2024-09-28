@@ -91,6 +91,7 @@ export function TaskManager() {
   const [filters, setFilters] = useState({ status: 'all', assignedTo: 'all' })
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
+  const [userdata, setuserdata] = useState([])
 
   const tasksPerPage = 5
 
@@ -173,8 +174,28 @@ export function TaskManager() {
     }
   }
 
+  const fetchalldata = async () => {
+    const response = await fetch(`${BaseApiUrl}/event/all`, {
+      method: 'GET',
+      headers: {
+        'eventid': dataquesiton
+      },
+    })
+    const json = await response.json()
+
+    if (json) {
+      console.log(json);
+      setuserdata(json.newdata)
+    
+
+
+    }
+
+  }
+
   useEffect(() => {
     fetchtask()
+    fetchalldata()
   }, [])
   
 
@@ -287,7 +308,7 @@ export function TaskManager() {
 
       <AnimatePresence>
         {showAddForm && (
-          <AddTaskForm onClose={() => setShowAddForm(false)} onAddTask={handleAddTask} users={users} />
+          <AddTaskForm onClose={() => setShowAddForm(false)} onAddTask={handleAddTask} users={userdata} />
         )}
       </AnimatePresence>
     </motion.div>
