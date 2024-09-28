@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@zegocloud/zego-uikit-prebuilt": "^2.9.1",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-dialog": "^1.1.1",
@@ -27,6 +26,7 @@
     "@react-three/drei": "^9.114.0",
     "@react-three/fiber": "^8.17.8",
     "@reduxjs/toolkit": "^2.2.7",
+    "@zegocloud/zego-uikit-prebuilt": "^2.9.1",
     "add": "^2.0.6",
     "canvas-confetti": "^1.9.3",
     "class-variance-authority": "^0.7.0",
@@ -40,6 +40,7 @@
     "react": "^18",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18",
+    "react-hot-toast": "^2.4.1",
     "react-icons": "^5.3.0",
     "react-redux": "^9.1.2",
     "recharts": "^2.12.7",
@@ -50,7 +51,6 @@
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.169.0",
     "toast": "^0.5.4"
-    
   },
   "devDependencies": {
     "eslint": "^8",
