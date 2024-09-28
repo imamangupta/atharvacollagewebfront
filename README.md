@@ -63,9 +63,6 @@ To get a local copy up and running, follow these simple steps.
 - Node.js installed
 - MongoDB installed and running
 
-### Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/plankaro.git
+
 
 
