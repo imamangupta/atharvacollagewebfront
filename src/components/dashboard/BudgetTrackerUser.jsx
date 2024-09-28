@@ -29,7 +29,7 @@ export default function BudgetTrackerUser() {
   const dataquesiton = useSelector((store) => store.eventid);
   const usermydata = useSelector((store) => store.userdata);
   console.log(usermydata);
-  
+
 
   const [budget, setBudget] = useState(1000000) // 10 Lakh INR
   const [spent, setSpent] = useState(600000)
@@ -48,7 +48,7 @@ export default function BudgetTrackerUser() {
     name: 'Rahul Sharma',
     email: 'rahul.sharma@example.com',
     avatar: '/placeholder.svg?height=100&width=100',
-    userid:usermydata?.id
+    userid: usermydata?.id
   }
 
   useEffect(() => {
@@ -59,13 +59,6 @@ export default function BudgetTrackerUser() {
   const addNewBill = async () => {
 
 
-    console.log('asdfkjaldsf workingldsakfj');
-
-
-
-
-    // e.preventDefault()
-    // In a real app, you'd send this to a server
 
     const billToAdd = {
       ...newBill,
@@ -78,41 +71,41 @@ export default function BudgetTrackerUser() {
     }
     console.log(billToAdd);
 
-     const data = new FormData();
+    const data = new FormData();
 
-      data.append("file", billPhoto);
-      data.append("upload_preset", "kfdvzoaz");
-      data.append("cloud_name", "dggd6cvzh");
-      // CLOUDINARY_URL=cloudinary://383736856582798:VATPzuynv5I_0lkdHMdnrYNakYk@dggd6cvzh
-
-
-      if (billPhoto === null) {
-        return console.log('work..');
-      }
-
-      const res = await fetch('https://api.cloudinary.com/v1_1/dggd6cvzh/image/upload', {
-        method: "POST",
-        body: data
-      })
-      const cloudData = await res.json();
-
-     const data2 = new FormData();
-
-      data2.append("file", productPhoto);
-      data2.append("upload_preset", "kfdvzoaz");
-      data2.append("cloud_name", "dggd6cvzh");
-      // CLOUDINARY_URL=cloudinary://383736856582798:VATPzuynv5I_0lkdHMdnrYNakYk@dggd6cvzh
+    data.append("file", billPhoto);
+    data.append("upload_preset", "kfdvzoaz");
+    data.append("cloud_name", "dggd6cvzh");
+    // CLOUDINARY_URL=cloudinary://383736856582798:VATPzuynv5I_0lkdHMdnrYNakYk@dggd6cvzh
 
 
-      if (productPhoto === null) {
-        return console.log('work..');
-      }
+    if (billPhoto === null) {
+      return console.log('work..');
+    }
 
-      const res2 = await fetch('https://api.cloudinary.com/v1_1/dggd6cvzh/image/upload', {
-        method: "POST",
-        body: data
-      })
-      const cloudData2 = await res2.json();
+    const res = await fetch('https://api.cloudinary.com/v1_1/dggd6cvzh/image/upload', {
+      method: "POST",
+      body: data
+    })
+    const cloudData = await res.json();
+
+    const data2 = new FormData();
+
+    data2.append("file", productPhoto);
+    data2.append("upload_preset", "kfdvzoaz");
+    data2.append("cloud_name", "dggd6cvzh");
+    // CLOUDINARY_URL=cloudinary://383736856582798:VATPzuynv5I_0lkdHMdnrYNakYk@dggd6cvzh
+
+
+    if (productPhoto === null) {
+      return console.log('work..');
+    }
+
+    const res2 = await fetch('https://api.cloudinary.com/v1_1/dggd6cvzh/image/upload', {
+      method: "POST",
+      body: data2
+    })
+    const cloudData2 = await res2.json();
 
 
 
@@ -124,7 +117,7 @@ export default function BudgetTrackerUser() {
       },
       body: JSON.stringify({
         billtitle: newBill.title, amount: newBill.amount, category: newBill.category, whichdate: newBill.date,
-        description: newBill.description, billphote: cloudData.url, productphoto: cloudData2.url, eventid: dataquesiton, userid: usermydata.id,status:'pending',username:usermydata.userName
+        description: newBill.description, billphote: cloudData.url, productphoto: cloudData2.url, eventid: dataquesiton, userid: usermydata.id, status: 'pending', username: usermydata.userName
       })
     });
 
@@ -134,8 +127,6 @@ export default function BudgetTrackerUser() {
 
       console.log(json);
       setBills(json.data)
-
-
 
     }
 
@@ -155,14 +146,14 @@ export default function BudgetTrackerUser() {
   const openCamera = async (type) => {
     setCurrentPhotoType(type);
     setIsCameraOpen(true);
-  
+
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: { exact: 'environment' }, // Requests the back camera
         },
       });
-  
+
       // Set the video stream to the video element
       videoRef.current.srcObject = stream;
       videoRef.current.play();
@@ -170,7 +161,7 @@ export default function BudgetTrackerUser() {
       console.error("Error accessing the camera", err);
     }
   };
-  
+
 
   const capturePhoto = () => {
     const video = videoRef.current
@@ -199,7 +190,7 @@ export default function BudgetTrackerUser() {
   const otherBills = bills.filter(bill => bill)
 
 
-  const fetchmybill = async()=>{
+  const fetchmybill = async () => {
     const response = await fetch(`${BaseApiUrl}/bill`, {
       method: 'GET',
       headers: {
@@ -209,16 +200,16 @@ export default function BudgetTrackerUser() {
     const json = await response.json()
 
     if (json.data) {
-     console.log(json);
-     setBills(json.data)
-     
+      console.log(json);
+      setBills(json.data)
+
     }
   }
 
   useEffect(() => {
     fetchmybill()
   }, [])
-  
+
 
   return (
     <motion.div
@@ -227,7 +218,7 @@ export default function BudgetTrackerUser() {
       transition={{ duration: 0.5 }}
       className="p-4 max-w-7xl mx-auto bg-white"
     >
-      <div className="flex justify-between items-center mb-6">
+      {/* <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-indigo-700">User Dashboard</h1>
         <div className="flex items-center space-x-4">
           <Avatar>
@@ -239,7 +230,7 @@ export default function BudgetTrackerUser() {
             <p className="text-sm text-indigo-500">{currentUser.email}</p>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <motion.div
         initial={{ y: 20, opacity: 0 }}
@@ -257,12 +248,12 @@ export default function BudgetTrackerUser() {
                   <p className="text-sm text-indigo-500">Total Budget</p>
                   <p className="text-2xl font-bold text-indigo-700">₹{budget.toLocaleString('en-IN')}</p>
                 </div>
-                <div className="text-right">
+                {/* <div className="text-right">
                   <p className="text-sm text-indigo-500">Spent</p>
                   <p className="text-2xl font-bold text-indigo-700">₹{spent.toLocaleString('en-IN')}</p>
-                </div>
+                </div> */}
               </div>
-              <Progress value={(spent / budget) * 100} className="h-2 bg-indigo-100" indicatorClassName="bg-indigo-600" />
+              <Progress value={(spent / budget) * 0} className="h-2 bg-indigo-100" indicatorClassName="bg-indigo-600" />
               <p className="text-sm text-indigo-500 text-center">
                 ₹{(budget - spent).toLocaleString('en-IN')} remaining
               </p>

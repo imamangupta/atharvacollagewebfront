@@ -254,7 +254,7 @@ export default function BudgetTrackerAdmin() {
                   {filteredBills.map((bill) => (
                     <TableRow key={bill.id}>
                       <TableCell>{bill.username}</TableCell>
-                      <TableCell>{bill.title}</TableCell>
+                      <TableCell>{bill.billtitle}</TableCell>
                       <TableCell>₹{bill.amount.toLocaleString('en-IN')}</TableCell>
                       <TableCell>{bill.category}</TableCell>
                       <TableCell>{new Date(bill.date).toLocaleDateString('en-IN')}</TableCell>
@@ -289,7 +289,7 @@ export default function BudgetTrackerAdmin() {
       <Dialog open={!!selectedBill} onOpenChange={() => setSelectedBill(null)}>
         <DialogContent className="max-w-md bg-white">
           <DialogHeader>
-            <DialogTitle className="text-indigo-700">{selectedBill?.title}</DialogTitle>
+            <DialogTitle className="text-indigo-700">{selectedBill?.billtitle}</DialogTitle>
           </DialogHeader>
           <div className="mt-4 space-y-2">
             <p><strong className="text-indigo-600">User:</strong> {selectedBill?.username}</p>
@@ -300,9 +300,9 @@ export default function BudgetTrackerAdmin() {
             <p><strong className="text-indigo-600">Description:</strong> {selectedBill?.description}</p>
             <div className="mt-4 space-y-2">
               <p><strong className="text-indigo-600">Bill Photo:</strong></p>
-              <img src={selectedBill?.billphote} alt="Bill" className="w-full h-auto" />
+              <img src={selectedBill?.billphote} alt="Bill" className="w-[100px] h-auto" />
               <p><strong className="text-indigo-600">Product Photo:</strong></p>
-              <img src={selectedBill?.productphoto} alt="Product" className="w-full h-auto" />
+              <img src={selectedBill?.productphoto} alt="Product" className="w-[100px] h-auto" />
             </div>
           </div>
         </DialogContent>
