@@ -1,7 +1,8 @@
 # Plankaro
 
 **Plan Karo** - An All-in-One Event Planning & Execution Platform
-
+## Youtube Video Link
+https://youtu.be/WOrcSMzP38g
 ## Introduction
 
 **Plankaro** is an event management platform designed to streamline and simplify the process of planning and executing events. With its collaborative tools, budget management features, and real-time updates, it offers a comprehensive solution for both small and large-scale events.
