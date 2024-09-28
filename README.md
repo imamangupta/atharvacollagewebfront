@@ -7,6 +7,8 @@ https://youtu.be/WOrcSMzP38g
 
 **Plankaro** is an event management platform designed to streamline and simplify the process of planning and executing events. With its collaborative tools, budget management features, and real-time updates, it offers a comprehensive solution for both small and large-scale events.
 
+![Plankaro Logo](https://res.cloudinary.com/dggd6cvzh/image/upload/v1727515789/Screenshot_2024-09-28_142838_x9vdo5.png)
+
 ## Features
 
 ### 1. Group Collaboration
