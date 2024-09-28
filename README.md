@@ -9,6 +9,8 @@ https://youtu.be/WOrcSMzP38g
 
 ![Home UI](https://res.cloudinary.com/dggd6cvzh/image/upload/v1727515789/Screenshot_2024-09-28_142345_wih4bi.png)
 ![Main](https://res.cloudinary.com/dggd6cvzh/image/upload/v1727515789/Screenshot_2024-09-28_142757_vuizis.png)
+![Pic](https://res.cloudinary.com/dggd6cvzh/image/upload/v1727515789/Screenshot_2024-09-28_142838_x9vdo5.png)
+![Vendor](https://res.cloudinary.com/dggd6cvzh/image/upload/v1727515789/Screenshot_2024-09-28_142847_ztctmb.png)
 
 
 ## Features
