@@ -73,8 +73,8 @@ const TaskList = ({ tasks }) => {
                       <span className="ml-2 capitalize">{task.status}</span>
                     </Badge>
                   </TableCell>
-                  <TableCell className="font-medium">{task.name}</TableCell>
-                  <TableCell>{task.assignedTo}</TableCell>
+                  <TableCell className="font-medium">{task.taskname}</TableCell>
+                  <TableCell>{task.assignedto}</TableCell>
                   <TableCell>{new Date(task.dueDate).toLocaleDateString()}</TableCell>
                   <TableCell>
                     <TooltipProvider>
@@ -111,7 +111,7 @@ const TaskList = ({ tasks }) => {
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                               <h4 className="font-semibold text-gray-700 mb-2">Description:</h4>
-                              <p className="text-gray-600">{task.description}</p>
+                              <p className="text-gray-600">{task.Description}</p>
                             </div>
                             <div>
                               <h4 className="font-semibold text-gray-700 mb-2">Details:</h4>

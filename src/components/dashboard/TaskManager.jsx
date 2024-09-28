@@ -9,6 +9,8 @@ import { Plus, Search, Filter, ChevronLeft, ChevronRight, Trophy, Medal } from '
 import TaskList from './TaskList'
 import AddTaskForm from './AddTaskForm'
 import TaskFilter from './TaskFilter'
+import { useSelector } from 'react-redux';
+import { BaseApiUrl } from '@/utils/constants'
 
 // Integrated database
 const initialDatabase = {
@@ -74,6 +76,11 @@ const initialDatabase = {
 };
 
 export function TaskManager() {
+
+
+  const dataquesiton = useSelector((store) => store.eventid);
+
+
   const [database, setDatabase] = useState(initialDatabase)
   const [tasks, setTasks] = useState([])
   const [users, setUsers] = useState([])
@@ -94,15 +101,15 @@ export function TaskManager() {
   }, [database, currentPage, searchTerm, filters])
 
   const updateTasks = () => {
-    let filteredTasks = database.tasks.filter(task => 
+    let filteredTasks = database.tasks.filter(task =>
       (task.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      task.assignedTo.toLowerCase().includes(searchTerm.toLowerCase())) &&
+        task.assignedTo.toLowerCase().includes(searchTerm.toLowerCase())) &&
       (filters.status === 'all' || task.status === filters.status) &&
       (filters.assignedTo === 'all' || task.assignedTo === filters.assignedTo)
     )
 
     setTotalPages(Math.ceil(filteredTasks.length / tasksPerPage))
-    
+
     const startIndex = (currentPage - 1) * tasksPerPage
     const endIndex = startIndex + tasksPerPage
     setTasks(filteredTasks.slice(startIndex, endIndex))
@@ -120,14 +127,56 @@ export function TaskManager() {
     setLeaderboard(leaderboard)
   }
 
-  const handleAddTask = (newTask) => {
+  const handleAddTask = async (newTask) => {
     const taskWithId = { ...newTask, id: database.tasks.length + 1 }
+
+    console.log(newTask);
+
+    const response = await fetch(`${BaseApiUrl}/task`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        taskname: newTask.name, assignedto: newTask.assignedTo, Description: newTask.description, budget: newTask.budget, status: newTask.status,
+        priority: newTask.priority, duedate: newTask.dueDate, eventid: dataquesiton
+      })
+    })
+    const json = await response.json()
+
+    if (json.data) {
+      console.log(json)
+      
+      
+    } else {
+      toast.error("Invalid Credentials")
+    }
+
     setDatabase(prevDB => ({
       ...prevDB,
       tasks: [taskWithId, ...prevDB.tasks]
     }))
     setShowAddForm(false)
   }
+
+  const fetchtask = async()=>{
+    const response = await fetch(`${BaseApiUrl}/task`, {
+      method: 'GET',
+      headers: {
+        'eventid': dataquesiton
+      },
+    })
+    const json = await response.json()
+    if (json.data) {
+      console.log('event',json);
+      setTasks(json.data)    
+    }
+  }
+
+  useEffect(() => {
+    fetchtask()
+  }, [])
+  
 
   return (
     <motion.div
@@ -196,36 +245,45 @@ export function TaskManager() {
               </div>
             </CardContent>
           </Card>
-        <div>
-          <Card className="w-full bg-white shadow-lg mt-10 overflow-hidden ">
-            <CardHeader className="bg-gray-50 border-b border-gray-200 p-4">
-              <CardTitle className="text-xl font-bold text-gray-800">Top Performers</CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <ul className="divide-y divide-gray-200">
-                {leaderboard.map((user, index) => (
-                  <li key={user.id} className="flex items-center p-4 hover:bg-gray-50 transition-colors">
-                    <div className="flex-shrink-0 w-8 text-center">
-                      {index === 0 && <Trophy className="h-6 w-6 text-yellow-400" />}
-                      {index === 1 && <Medal className="h-6 w-6 text-gray-400" />}
-                      {index === 2 && <Medal className="h-6 w-6 text-amber-600" />}
-                      {index > 2 && index + 1}
-                    </div>
-                    <div className="ml-4 flex-grow">
-                      <p className="text-sm font-medium text-gray-900">{user.name}</p>
-                      <p className="text-sm text-gray-500">{user.tasksCompleted}/{user.totalTasks} tasks</p>
-                    </div>
-                    <div className="ml-4 flex-shrink-0">
-                      <div className="text-sm font-medium text-blue-600">{user.completionRate.toFixed(0)}%</div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
+
+
+
+
+
+          <div>
+            <Card className="w-full bg-white shadow-lg mt-10 overflow-hidden ">
+              <CardHeader className="bg-gray-50 border-b border-gray-200 p-4">
+                <CardTitle className="text-xl font-bold text-gray-800">Top Performers</CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                <ul className="divide-y divide-gray-200">
+                  {leaderboard.map((user, index) => (
+                    <li key={user.id} className="flex items-center p-4 hover:bg-gray-50 transition-colors">
+                      <div className="flex-shrink-0 w-8 text-center">
+                        {index === 0 && <Trophy className="h-6 w-6 text-yellow-400" />}
+                        {index === 1 && <Medal className="h-6 w-6 text-gray-400" />}
+                        {index === 2 && <Medal className="h-6 w-6 text-amber-600" />}
+                        {index > 2 && index + 1}
+                      </div>
+                      <div className="ml-4 flex-grow">
+                        <p className="text-sm font-medium text-gray-900">{user.name}</p>
+                        <p className="text-sm text-gray-500">{user.tasksCompleted}/{user.totalTasks} tasks</p>
+                      </div>
+                      <div className="ml-4 flex-shrink-0">
+                        <div className="text-sm font-medium text-blue-600">{user.completionRate.toFixed(0)}%</div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+
+
+
+
         </div>
       </div>
-        </div>
 
       <AnimatePresence>
         {showAddForm && (
