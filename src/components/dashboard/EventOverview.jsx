@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation'
 import { BaseApiUrl } from '@/utils/constants'
 import { useDispatch } from 'react-redux'
 import { addEvent } from '@/app/redux/slice'
-import {  useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 export function EventOverview() {
   const router = useRouter()
@@ -20,9 +20,10 @@ export function EventOverview() {
   const usermydata = useSelector((store) => store.userdata);
   console.log(usermydata);
   let userdata = usermydata
-  
+
 
   const [myEvent, setMyEvent] = useState([])
+  const [joinEvent, setJoinEvent] = useState([])
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -35,11 +36,11 @@ export function EventOverview() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ memberid: userdata.id, otpdegit:code })
+        body: JSON.stringify({ memberid: userdata.id, otpdegit: code })
       })
       const json = await response.json()
       if (json) {
-        
+
         toast.success(`Joined event with code: ${code}`)
         setIsJoinModalOpen(false)
       }
@@ -118,7 +119,7 @@ export function EventOverview() {
 
     if (json.data) {
       // console.log('userdata',userdata);
-      
+
       // console.log('event',json);
       setMyEvent(json.data)
       // console.log(json.data[0]._id);
@@ -127,10 +128,28 @@ export function EventOverview() {
       // localStorage.getItem('eventid',json.data[0]._id)
     }
   }
+  const fetchJointEvent = async () => {
+    const response = await fetch(`http://localhost:4000/api/joinevent/joinevent`, {
+      method: 'GET',
+      headers: {
+        'memberid': usermydata?.id
+      },
+    })
+    const json = await response.json()
+
+    if (json) {
+      // console.log('userdata',userdata);
+      setJoinEvent(json.data)
+
+     console.log('fetchjointevek',json);
+     
+    }
+  }
 
 
   useEffect(() => {
     fetchEvent()
+    fetchJointEvent()
   }, [usermydata])
 
 
@@ -171,10 +190,11 @@ export function EventOverview() {
           }}
         >
           {myEvent.map((event, index) => (
-            <EventCard  event={event} key={index} index={index} />
+            <EventCard event={event} key={index} index={index} />
           ))}
         </motion.div>
       </AnimatePresence>
+
       <JoinEventModal
         isOpen={isJoinModalOpen}
         onClose={() => setIsJoinModalOpen(false)}
@@ -187,6 +207,26 @@ export function EventOverview() {
         onCreate={handleCreateEvent}
         isLoading={isLoading}
       />
+
+
+      <div className='mt-10'>
+        <h1 className="text-3xl font-bold text-gray-800">Joint Event</h1>
+      <AnimatePresence>
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            visible: { transition: { staggerChildren: 0.1 } },
+          }}
+        >
+          {joinEvent.map((event, index) => (
+            <EventCard event={event} key={index} index={index} />
+          ))}
+        </motion.div>
+      </AnimatePresence>
+
+      </div>
     </div>
   )
 }
