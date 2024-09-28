@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Plankaro
+
+**Plan Karo** - An All-in-One Event Planning & Execution Platform
+
+## Introduction
+
+**Plankaro** is an event management platform designed to streamline and simplify the process of planning and executing events. With its collaborative tools, budget management features, and real-time updates, it offers a comprehensive solution for both small and large-scale events.
+
+## Features
+
+### 1. Group Collaboration
+- **Task Management**: Assign tasks, track progress, and ensure everything is on schedule.
+- **Role Assignment**: Assign roles to volunteers and manage their responsibilities.
+- **Discussions & Comments**: Easily share ideas and questions within the team.
+- **Real-Time Updates**: Stay informed about any changes or updates as they happen.
+
+### 2. Budget Tracking
+- **Expense Tracking**: Record and categorize all event-related expenses.
+- **Customizable Budget**: Customize the budget based on your income and expenses.
+- **Real-Time Budget Updates**: Get instant updates on how your spending affects your budget.
+- **Financial Reports**: Generate detailed financial reports to analyze your event’s spending and stay within budget.
+
+### 3. Seamless Communication
+- **Video Chat**: Conduct online meetings with volunteers.
+- **Real-Time Communication**: Keep in touch with your team in real-time.
+- **Shared Calendar**: Schedule meetings, tasks, and deadlines in one centralized calendar.
+
+### 4. Event Dashboard
+- **Overview**: View all the details of your event in a well-organized dashboard.
+- **Shared Resources**: Store and share event photos, videos, and other files.
+- **Vendor Responses**: Record and manage feedback and responses from vendors and guests.
+- **Event Information Management**: Keep track of all event-related documents and updates.
+
+### 5. Feedback and Data
+- **Feedback Collection**: Collect feedback from guests and participants for continuous improvement.
+- **Record-Keeping**: Store data on vendors, expenses, and other event-related activities in one place.
+
+## Key Benefits
+- **Centralized Decision-Making**: Manage all aspects of your event in one place.
+- **Task Delegation**: Easily assign and track tasks, ensuring a smooth workflow.
+- **Event Photos and Videos**: Store event media for future reference.
+- **Event Budget Control**: Keep a close eye on your event budget and prevent overspending.
+
+## How to Use Plankaro
+1. **Set Up Your Event**: Start by creating a new event and setting up tasks, budgets, and roles.
+2. **Collaborate with Your Team**: Invite team members and volunteers to manage and execute tasks.
+3. **Track Expenses and Budget**: Record expenses in real-time and adjust your budget as needed.
+4. **Monitor Progress**: Use the dashboard to view the event’s overall status and make informed decisions.
+5. **Capture Memories**: Store photos, videos, and feedback from the event for future use and evaluation.
+
+## Tech Stack
+- **Frontend**: React.js
+- **Backend**: Node.js, Express
+- **Database**: MongoDB
+- **Real-Time Communication**: WebSockets, WebRTC
+- **Authentication**: JWT-based secure authentication
 
 ## Getting Started
 
-First, run the development server:
+To get a local copy up and running, follow these simple steps.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Prerequisites
+- Node.js installed
+- MongoDB installed and running
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/plankaro.git
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
