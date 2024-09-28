@@ -1,127 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Plus,
-  Search,
-  Filter,
-  ChevronLeft,
-  ChevronRight,
-  Trophy,
-  Medal,
-} from "lucide-react";
+import { Plus, Search, Filter, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import TaskList from "./TaskList";
 import AddTaskForm from "./AddTaskForm";
 import TaskFilter from "./TaskFilter";
 import { useSelector } from "react-redux";
 import { BaseApiUrl } from "@/utils/constants";
-
-// Integrated database
-const initialDatabase = {
-  users: [
-    {
-      id: 1,
-      name: "John Doe",
-      email: "john@example.com",
-      tasksCompleted: 7,
-      totalTasks: 10,
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "jane@example.com",
-      tasksCompleted: 5,
-      totalTasks: 8,
-    },
-    {
-      id: 3,
-      name: "Mike Johnson",
-      email: "mike@example.com",
-      tasksCompleted: 3,
-      totalTasks: 5,
-    },
-    {
-      id: 4,
-      name: "Emily Brown",
-      email: "emily@example.com",
-      tasksCompleted: 6,
-      totalTasks: 9,
-    },
-    {
-      id: 5,
-      name: "Alex Wilson",
-      email: "alex@example.com",
-      tasksCompleted: 4,
-      totalTasks: 7,
-    },
-  ],
-  tasks: [
-    {
-      id: 1,
-      name: "Design new landing page",
-      status: "in-progress",
-      assignedTo: "John Doe",
-      description:
-        "Create a modern and responsive landing page for our product",
-      budget: 1000,
-      priority: "high",
-      dueDate: "2023-06-30T00:00:00.000Z",
-    },
-    {
-      id: 2,
-      name: "Implement user authentication",
-      status: "pending",
-      assignedTo: "Jane Smith",
-      description: "Set up secure user authentication system using OAuth",
-      budget: 1500,
-      priority: "medium",
-      dueDate: "2023-07-15T00:00:00.000Z",
-    },
-    {
-      id: 3,
-      name: "Write API documentation",
-      status: "completed",
-      assignedTo: "Mike Johnson",
-      description: "Create comprehensive documentation for our RESTful API",
-      budget: 800,
-      priority: "low",
-      dueDate: "2023-06-20T00:00:00.000Z",
-    },
-    {
-      id: 4,
-      name: "Optimize database queries",
-      status: "in-progress",
-      assignedTo: "Emily Brown",
-      description: "Improve the performance of key database queries",
-      budget: 1200,
-      priority: "high",
-      dueDate: "2023-07-05T00:00:00.000Z",
-    },
-    {
-      id: 5,
-      name: "Implement real-time notifications",
-      status: "pending",
-      assignedTo: "Alex Wilson",
-      description:
-        "Add WebSocket-based real-time notifications for user actions",
-      budget: 1000,
-      priority: "medium",
-      dueDate: "2023-07-20T00:00:00.000Z",
-    },
-  ],
-};
+import { toast } from "react-hot-toast";
 
 export function TaskManager() {
   const dataquesiton = useSelector((store) => store.eventid);
 
-  const [database, setDatabase] = useState(initialDatabase);
   const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState([]);
-  const [leaderboard, setLeaderboard] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [showFilters, setShowFilters] = useState(false);
@@ -129,112 +25,98 @@ export function TaskManager() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [userdata, setuserdata] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const tasksPerPage = 5;
 
+  const fetchTasks = useCallback(async () => {
+    try {
+      const response = await fetch(`${BaseApiUrl}/task`, {
+        method: "GET",
+        headers: {
+          eventid: dataquesiton,
+        },
+      });
+      const json = await response.json();
+      if (json.data) {
+        const filteredTasks = json.data.filter(
+          (task) =>
+            (task.taskname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              task.assignedto.toLowerCase().includes(searchTerm.toLowerCase())) &&
+            (filters.status === "all" || task.status === filters.status) &&
+            (filters.assignedTo === "all" || task.assignedto === filters.assignedTo)
+        );
+
+        setTotalPages(Math.ceil(filteredTasks.length / tasksPerPage));
+
+        const startIndex = (currentPage - 1) * tasksPerPage;
+        const endIndex = startIndex + tasksPerPage;
+        setTasks(filteredTasks.slice(startIndex, endIndex));
+      }
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+      toast.error("Failed to fetch tasks");
+    }
+  }, [dataquesiton, currentPage, searchTerm, filters]);
+
+  const fetchAllData = useCallback(async () => {
+    try {
+      const response = await fetch(`${BaseApiUrl}/event/all`, {
+        method: "GET",
+        headers: {
+          eventid: dataquesiton,
+        },
+      });
+      const json = await response.json();
+      if (json) {
+        setuserdata(json.newdata);
+      }
+    } catch (error) {
+      console.error("Error fetching all data:", error);
+      toast.error("Failed to fetch user data");
+    }
+  }, [dataquesiton]);
+
   useEffect(() => {
-    setUsers(database.users);
-    updateTasks();
-    updateLeaderboard();
-  }, [database, currentPage, searchTerm, filters]);
-
-  const updateTasks = () => {
-    let filteredTasks = database.tasks.filter(
-      (task) =>
-        (task.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          task.assignedTo.toLowerCase().includes(searchTerm.toLowerCase())) &&
-        (filters.status === "all" || task.status === filters.status) &&
-        (filters.assignedTo === "all" || task.assignedTo === filters.assignedTo)
-    );
-
-    setTotalPages(Math.ceil(filteredTasks.length / tasksPerPage));
-
-    const startIndex = (currentPage - 1) * tasksPerPage;
-    const endIndex = startIndex + tasksPerPage;
-    setTasks(filteredTasks.slice(startIndex, endIndex));
-  };
-
-  const updateLeaderboard = () => {
-    const leaderboard = database.users
-      .map((user) => ({
-        ...user,
-        completionRate: (user.tasksCompleted / user.totalTasks) * 100,
-      }))
-      .sort((a, b) => b.completionRate - a.completionRate)
-      .slice(0, 5);
-
-    setLeaderboard(leaderboard);
-  };
+    fetchTasks();
+    fetchAllData();
+  }, [fetchTasks, fetchAllData]);
 
   const handleAddTask = async (newTask) => {
-    const taskWithId = { ...newTask, id: database.tasks.length + 1 };
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${BaseApiUrl}/task`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          taskname: newTask.name,
+          assignedto: newTask.assignedTo,
+          Description: newTask.description,
+          budget: newTask.budget,
+          status: newTask.status,
+          priority: newTask.priority,
+          duedate: newTask.dueDate,
+          eventid: dataquesiton,
+        }),
+      });
+      const json = await response.json();
 
-    console.log(newTask);
-
-    const response = await fetch(`${BaseApiUrl}/task`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        taskname: newTask.name,
-        assignedto: newTask.assignedTo,
-        Description: newTask.description,
-        budget: newTask.budget,
-        status: newTask.status,
-        priority: newTask.priority,
-        duedate: newTask.dueDate,
-        eventid: dataquesiton,
-      }),
-    });
-    const json = await response.json();
-
-    if (json.data) {
-      console.log(json);
-    } else {
-      toast.error("Invalid Credentials");
-    }
-
-    setDatabase((prevDB) => ({
-      ...prevDB,
-      tasks: [taskWithId, ...prevDB.tasks],
-    }));
-    setShowAddForm(false);
-  };
-
-  const fetchtask = async () => {
-    const response = await fetch(`${BaseApiUrl}/task`, {
-      method: "GET",
-      headers: {
-        eventid: dataquesiton,
-      },
-    });
-    const json = await response.json();
-    if (json.data) {
-      console.log("event", json);
-      setTasks(json.data);
+      if (json.data) {
+        toast.success("Task added successfully");
+        await fetchTasks(); // Refresh tasks after adding a new one
+        setShowAddForm(false);
+      } else {
+        toast.error("Failed to add task");
+      }
+    } catch (error) {
+      console.error("Error adding task:", error);
+      toast.error("Failed to add task");
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  const fetchalldata = async () => {
-    const response = await fetch(`${BaseApiUrl}/event/all`, {
-      method: "GET",
-      headers: {
-        eventid: dataquesiton,
-      },
-    });
-    const json = await response.json();
-
-    if (json) {
-      console.log(json);
-      setuserdata(json.newdata);
-    }
-  };
-
-  useEffect(() => {
-    fetchtask();
-    fetchalldata();
-  }, []);
 
   return (
     <motion.div
@@ -243,7 +125,7 @@ export function TaskManager() {
       transition={{ duration: 0.5 }}
       className="container mx-auto p-4 space-y-4"
     >
-      <div className="h-full flex-col ">
+      <div className="h-full flex-col">
         <div className="lg:col-span-2">
           <Card className="w-full overflow-hidden bg-white shadow-lg">
             <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0 bg-gray-50 border-b border-gray-200 p-4">
@@ -254,8 +136,14 @@ export function TaskManager() {
                 <Button
                   onClick={() => setShowAddForm(true)}
                   className="bg-blue-500 text-white hover:bg-blue-600"
+                  disabled={isLoading}
                 >
-                  <Plus className="mr-2 h-4 w-4" /> Add New Task
+                  {isLoading ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <Plus className="mr-2 h-4 w-4" />
+                  )}
+                  Add New Task
                 </Button>
                 <Button
                   variant="outline"
@@ -288,7 +176,7 @@ export function TaskManager() {
                       <TaskFilter
                         filters={filters}
                         setFilters={setFilters}
-                        users={users}
+                        users={userdata}
                       />
                     </motion.div>
                   )}
@@ -297,9 +185,7 @@ export function TaskManager() {
               <TaskList tasks={tasks} />
               <div className="mt-4 flex justify-center items-center space-x-2">
                 <Button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
                   variant="outline"
                 >
@@ -309,9 +195,7 @@ export function TaskManager() {
                   Page {currentPage} of {totalPages}
                 </span>
                 <Button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                  }
+                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}
                   variant="outline"
                 >
@@ -325,11 +209,28 @@ export function TaskManager() {
 
       <AnimatePresence>
         {showAddForm && (
-          <AddTaskForm
-            onClose={() => setShowAddForm(false)}
-            onAddTask={handleAddTask}
-            users={userdata}
-          />
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              transition={{ duration: 0.3 }}
+              className="mt-72 bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto"
+            >
+              <AddTaskForm
+                onClose={() => setShowAddForm(false)}
+                onAddTask={handleAddTask}
+                users={userdata}
+                isLoading={isLoading}
+              />
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </motion.div>
