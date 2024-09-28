@@ -129,7 +129,7 @@ export function EventOverview() {
     }
   }
   const fetchJointEvent = async () => {
-    const response = await fetch(`http://localhost:4000/api/joinevent/joinevent`, {
+    const response = await fetch(`${BaseApiUrl}/joinevent/joinevent`, {
       method: 'GET',
       headers: {
         'memberid': usermydata?.id

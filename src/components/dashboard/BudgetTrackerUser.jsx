@@ -192,7 +192,7 @@ export default function BudgetTrackerUser() {
 
 
   const fetchmybill = async()=>{
-    const response = await fetch(`http://localhost:4000/api/bill`, {
+    const response = await fetch(`${BaseApiUrl}/bill`, {
       method: 'GET',
       headers: {
         'eventid': dataquesiton

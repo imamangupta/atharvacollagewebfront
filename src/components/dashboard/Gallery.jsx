@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { motion, AnimatePresence } from "framer-motion"
 import { Download, Upload, ChevronLeft, ChevronRight } from "lucide-react"
 import {  useSelector } from 'react-redux';
+import { BaseApiUrl } from "@/utils/constants"
 
 const dummyImages = [
   // { id: 1, url: "/placeholder.svg?height=300&width=200", aspectRatio: 2/3 },
@@ -48,7 +49,7 @@ export default function Gallery() {
         const cloudData = await res.json();
   
         // Send the image URL to your backend after uploading to Cloudinary
-        const response = await fetch('http://localhost:4000/api/gallery', {
+        const response = await fetch(`${BaseApiUrl}/gallery`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -133,7 +134,7 @@ export default function Gallery() {
 
 
   const fetchImages = async()=>{
-    const response = await fetch(`http://localhost:4000/api/gallery`, {
+    const response = await fetch(`${BaseApiUrl}/gallery`, {
       method: 'GET',
       headers: {
         'eventid': dataquesiton
