@@ -14,13 +14,14 @@ import { BaseApiUrl } from '@/utils/constants'
 import VendorDirectory from '@/components/dashboard/VendorDirectory'
 // import { BudgetTrackerAdmin } from '@/components/dashboard/BudgetTrackerAdmin'
 import { useSearchParams } from "next/navigation";
-import EventPerticular from '@/components/dashboard/EventPerticular'
+// import EventPerticular from '@/components/dashboard/EventPerticular'
 import Gallery from '@/components/dashboard/Gallery'
 
 import { useDispatch } from 'react-redux'
 import { addUser } from '@/app/redux/slice'
 // import VideoRoom from '@/components/dashboard/Interview'
-import Interview from '@/components/dashboard/Interview'
+import VideoCall from '@/components/dashboard/VideoCall'
+import EventDetails from '@/components/dashboard/EventDetails'
 
 export default function Dashboard() {
   // const searchParams = useSearchParams();
@@ -67,7 +68,7 @@ export default function Dashboard() {
       case 'tasks':
         return <TaskManager />
       case 'event':
-        return <EventPerticular />
+        return <EventDetails />
       case 'budgetuser':
         return <BudgetTrackerUser />
       case 'budgetadmin':
@@ -77,7 +78,7 @@ export default function Dashboard() {
       case 'messages':
         return <Messaging />
       case 'videocall':
-        return <Interview />
+        return <VideoCall />
       case 'gallery':
         return <Gallery />
       default:
